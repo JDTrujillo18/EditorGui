@@ -1,17 +1,19 @@
 import sys
 from PyQt4 import QtGui, QtCore
-
+from LineNumberBar import *
 
 class Window(QtGui.QMainWindow):
-	def __init__(self):
+	def __init__(self, width):
 		super(Window, self).__init__()
 		self.filename = ""
 		self.count = 1
+		self.w = width
 		self.initUI()
 
 	def initUI(self):
 		self.setWindowTitle("Text Editor")
 		self.setWindowIcon(QtGui.QIcon('icons/icon.png'))
+
 		self.initActions()
 		self.initMenuBar()
 		self.initActionsToolBar()
@@ -233,8 +235,17 @@ class Window(QtGui.QMainWindow):
 
 	def winmain(self):
 		self.initTab()
+		self.file_newtxt()
+		frame = QtGui.QFrame()
+		# self.numbers = LineNumberBar(self.w, self.tab_widget)
+		layout = QtGui.QHBoxLayout()
+		layout.setSpacing(1.5)
+		# layout.addWidget(self.numbers)
+		layout.addWidget(self.tab_widget)
+		frame.setLayout(layout)
 
-		self.setCentralWidget(self.tab_widget)
+		self.setCentralWidget(frame)
+
 		self.showapp()
 
 	def showapp(self):
@@ -433,7 +444,9 @@ class Window(QtGui.QMainWindow):
 
 def main():
 	app = QtGui.QApplication(sys.argv)
-	GUI = Window()
+	screen_resolution = app.desktop().screenGeometry()
+	width, height = screen_resolution.width(), screen_resolution.height()
+	GUI = Window(width)
 	sys.exit(app.exec_())
 
 
